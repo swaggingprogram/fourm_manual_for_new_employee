@@ -1,0 +1,32 @@
+<apex:page controller="EmployeeListController" title="社員情報編集画面" sidebar="false" lightningStylesheets="true" docType="html-5.0">
+    <apex:form >
+        <apex:sectionHeader title="社員情報編集画面">
+    　  <apex:pageBlock title="社員情報" id="result">
+           <apex:pageMessages id="msg"/>
+           <apex:pageBlockSection columns="1">
+               <apex:repeat value="{!editResult}" var="emp">
+                   <apex:inputField value="{!emp.Name}"/>
+                   <apex:inputField value="{!emp.Employee_Name__c}"/>
+                   <apex:inputField value="{!emp.Join_Date__c}"/>
+                   <apex:inputField value="{!emp.Resignation_Date__c}"/>
+                   <apex:inputField value="{!emp.Birth_Place__c}"/>
+                   <apex:inputField value="{!emp.Years_of_Service__c}"/>
+                   <apex:inputField value="{!emp.Position__c}"/>
+                   <apex:inputField value="{!emp.Manager__r.Employee_Name__c}" label="上司"/>
+                   <apex:inputField value="{!emp.Skills__c}"/>
+                   <apex:inputField value="{!emp.Employee_Description__c}"/>
+                   <apex:inputCheckbox value="{!emp.Employee_Status__c}"/>
+               </apex:repeat>
+           </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:pageBlock title="更新ボタンを押下すると一覧画面に戻ります">
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="更新" action="{!updateAndCloseEditPage}" onclick="return confirm('社員情報を更新します。よろしいですか？')"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="削除" action="{!deleteAndCloseEditPage}" onclick="return confirm('社員情報を削除します。よろしいですか？')"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        </apex:sectionHeader>
+    </apex:form>
+</apex:page>

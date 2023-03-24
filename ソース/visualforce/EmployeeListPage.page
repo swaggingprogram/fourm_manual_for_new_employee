@@ -1,0 +1,109 @@
+<apex:page controller="EmployeeListController" title="社員名簿管理画面" sidebar="false" lightningStylesheets="true" docType="html-5.0">
+    <apex:form >
+        <!-- 検索条件 -->
+        <apex:sectionHeader title="社員名簿管理画面">
+        <apex:pageBlock title="検索条件" id="search">
+            <apex:pageMessages id="msg"/>
+            <apex:pageBlockSection columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="社員番号"/>
+                    <apex:inputText value="{!searchParams.Name}" id="empCode"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="社員名"/>
+                    <apex:inputText value="{!searchParams.Employee_Name__c}" id="empName"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="役職"/>
+                    <apex:inputField value="{!searchParams.Position__c}" id="empPosition"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="社員ステータス"/>
+                    <apex:inputCheckbox value="{!searchParams.Employee_Status__c}" id="empPosition" selected="true"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons location="bottom">  
+                <apex:commandButton value="検索" action="{!searchEmployees}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+            
+        <!-- 検索結果 -->
+    　  <apex:pageBlock title="検索結果" id="result">
+           <apex:pageBlockSection columns="1">
+               <apex:pageBlockTable value="{!searchResult}" var="emp" align="left" cellPadding="6">
+                   <apex:column >
+                       <apex:facet name="header">社員番号</apex:facet>
+                       <apex:outputField value="{!emp.Name}"/>
+                   </apex:column>
+                   <apex:column >
+                       <apex:facet name="header">社員名</apex:facet>
+                       <apex:actionRegion immediate="true">
+                       <apex:outputField value="{!emp.Employee_Name__c}"/>
+                       </apex:actionRegion>
+                   </apex:column>
+                   <apex:column >
+                       <apex:facet name="header">入社日</apex:facet>
+                       <apex:outputField value="{!emp.Join_Date__c}"/>
+                   </apex:column>
+                   <apex:column >
+                       <apex:facet name="header">退社日</apex:facet>
+                       <apex:outputField value="{!emp.Resignation_Date__c}"/>
+                   </apex:column>
+                   <apex:column >
+                       <apex:facet name="header">出身地</apex:facet>
+                       <apex:outputField value="{!emp.Birth_Place__c}"/>
+                   </apex:column>
+                   <apex:column >
+                       <apex:facet name="header">勤続年数</apex:facet>
+                       <apex:outputField value="{!emp.Years_of_Service__c}"/>
+                   </apex:column>
+                   <apex:column >
+                       <apex:facet name="header">役職</apex:facet>
+                       <apex:outputField value="{!emp.Position__c}"/>
+                   </apex:column>
+                   <apex:column >
+                       <apex:facet name="header">上司</apex:facet>
+                       <apex:outputField value="{!emp.Manager__r.Employee_Name__c}"/>
+                   </apex:column>
+                   <apex:column >
+                       <apex:facet name="header">スキル</apex:facet>
+                       <apex:outputField value="{!emp.Skills__c}"/>
+                   </apex:column>  
+                   <apex:column >
+                       <apex:facet name="header">社員概要</apex:facet>
+                       <apex:outputField value="{!emp.Employee_Description__c}"/>
+                   </apex:column>
+                   <apex:column >
+                       <apex:facet name="header">社員ステータス</apex:facet>
+                       <apex:inputCheckbox value="{!emp.Employee_Status__c}" disabled="true"/>
+                   </apex:column>
+                   <apex:column >
+                       <apex:facet name="header">編集</apex:facet>
+                       <apex:commandLink value="編集" action="{!openEmployeeEditPage}">
+                           <apex:param name="selectedId" value="{!emp.Id}" assignTo="{!SelectedId}"/>
+                       </apex:commandLink>
+                   </apex:column>
+               </apex:pageBlockTable>
+           </apex:pageBlockSection>
+        </apex:pageBlock>        
+        </apex:sectionHeader>
+    　  <apex:pageBlock title="社員情報作成" id="create">
+           <apex:pageMessages id="msg2"/>
+           <apex:pageBlockSection columns="1">
+               <apex:repeat value="{!newEmployeeData}" var="ins">
+                   <apex:inputField value="{!ins.Name}"/>
+                   <apex:inputField value="{!ins.Employee_Name__c}"/>
+                   <apex:inputField value="{!ins.Join_Date__c}"/>
+                   <apex:inputField value="{!ins.Birth_Place__c}"/>
+                   <apex:inputField value="{!ins.Position__c}"/>
+                   <apex:inputField value="{!ins.Manager__c}" label="上司"/>
+                   <apex:inputField value="{!ins.Skills__c}"/>
+                   <apex:inputField value="{!ins.Employee_Description__c}"/>
+               </apex:repeat>
+           </apex:pageBlockSection>
+           <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="作成" action="{!createEmployee}" onclick="return confirm('社員情報を作成します。よろしいですか？')"/>
+           </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
